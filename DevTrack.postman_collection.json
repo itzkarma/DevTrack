@@ -1,0 +1,255 @@
+{
+  "info": {
+    "_postman_id": "devtrack-api-collection",
+    "name": "DevTrack API",
+    "description": "Minimal issue tracker API for DevTrack.\n\nRun the server first:\n```\npython3 manage.py runserver\n```\n\nBase URL defaults to http://127.0.0.1:8000.\n\nAllowed issue status: open, in_progress, resolved, closed.\nAllowed priority: low, medium, high, critical.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000"
+    }
+  ],
+  "item": [
+    {
+      "name": "Reporters",
+      "item": [
+        {
+          "name": "Create Reporter",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane Doe\",\n  \"email\": \"jane@example.com\",\n  \"team\": \"Platform\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/reporters/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reporters", ""]
+            },
+            "description": "Create a new reporter. Omit `id` to auto-assign the next integer."
+          },
+          "response": []
+        },
+        {
+          "name": "List All Reporters",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reporters/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reporters", ""]
+            },
+            "description": "Return all reporters as a JSON array."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Reporter by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reporters/?id=1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reporters", ""],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "Reporter ID"
+                }
+              ]
+            },
+            "description": "Return a single reporter. Responds with 404 if not found."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Reporter (validation error)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"email\": \"not-an-email\",\n  \"team\": \"\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/reporters/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reporters", ""]
+            },
+            "description": "Example request that returns 400 Bad Request."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Issues",
+      "item": [
+        {
+          "name": "Create Issue (critical)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Login button not working on mobile\",\n  \"description\": \"Users on iOS 17 cannot tap the login button\",\n  \"status\": \"open\",\n  \"priority\": \"critical\",\n  \"reporter_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/issues/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "issues", ""]
+            },
+            "description": "Creates a CriticalIssue. Response includes `message` from describe()."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Issue (low priority)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Update footer copyright year\",\n  \"description\": \"Footer still shows 2024\",\n  \"status\": \"open\",\n  \"priority\": \"low\",\n  \"reporter_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/issues/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "issues", ""]
+            },
+            "description": "Creates a LowPriorityIssue with a relaxed describe() message."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Issue (medium/high)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Slow dashboard load time\",\n  \"description\": \"Dashboard takes 8s to render on first visit\",\n  \"status\": \"in_progress\",\n  \"priority\": \"high\",\n  \"reporter_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/issues/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "issues", ""]
+            },
+            "description": "medium and high priority use the base Issue class."
+          },
+          "response": []
+        },
+        {
+          "name": "List All Issues",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/issues/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "issues", ""]
+            },
+            "description": "Return all issues as a JSON array."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Issue by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/issues/?id=1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "issues", ""],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": "Issue ID"
+                }
+              ]
+            },
+            "description": "Return a single issue. Responds with 404 if not found."
+          },
+          "response": []
+        },
+        {
+          "name": "List Issues by Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/issues/?status=open",
+              "host": ["{{base_url}}"],
+              "path": ["api", "issues", ""],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "open",
+                  "description": "open | in_progress | resolved | closed"
+                }
+              ]
+            },
+            "description": "Filter issues by status."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Issue (validation error)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"\",\n  \"description\": \"Missing title\",\n  \"status\": \"invalid\",\n  \"priority\": \"urgent\",\n  \"reporter_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/issues/",
+              "host": ["{{base_url}}"],
+              "path": ["api", "issues", ""]
+            },
+            "description": "Example request that returns 400 Bad Request."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
